@@ -1,8 +1,3 @@
-export const editingButton = document.querySelector('.profile__edit-button');
-export const additionCardButton = document.querySelector('.profile__add-button');
-export const profileAvatar = document.querySelector('.profile__avatar');
-export const editingAvatarButton = document.querySelector('.profile__edit-avatar-button');
-
 export const validationSettings = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',

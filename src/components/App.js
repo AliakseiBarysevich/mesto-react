@@ -26,7 +26,7 @@ function App() {
         ])
             .then((data) => {
                 const [userData, cardData] = data;
-                setCurrentUser(userData)
+                setCurrentUser(userData);
                 setCards(cardData);
             })
             .catch((err) => {
@@ -85,7 +85,6 @@ function App() {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
         // Отправляем запрос в API и получаем обновлённые данные карточки
         api.changeLikeCardStatus(card._id, isLiked)
-            //НЕ ДО КОНЦА ПОНИМАЮ ЛОГИКУ В THEN
             .then((newCard) => {
                 setCards((state) => state.map((c) =>
                     c._id === card._id ? newCard : c));

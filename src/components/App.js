@@ -129,10 +129,6 @@ function App() {
       .deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
-        // const newCards = cards.filter((c) =>
-        //   c._id === card._id ? "" : newCard
-        // );
-        // setCards(newCards);
       })
       .catch((err) => {
         console.log(`Вось такая вось памылка: ${err}`);

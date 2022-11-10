@@ -3,7 +3,7 @@ import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import useForm from "../hooks/useForm";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const currentUser = React.useContext(CurrentUserContext);
   const {values, handleChange, setValues} = useForm({});
 
@@ -24,7 +24,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       title="Редактировать профиль"
       isOpen={isOpen}
       onClose={onClose}
-      buttonText="Сохранить"
+      buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
       onSubmit={handleSubmit}
     >
       <div className="popup__input-container">

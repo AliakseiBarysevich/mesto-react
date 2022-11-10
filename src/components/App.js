@@ -19,6 +19,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const isOpen =
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
@@ -77,6 +78,7 @@ function App() {
   }
 
   function handleUpdateUser(data) {
+    setIsLoading(true);
     api
       .updateUserInfo(data)
       .then((userData) => {
@@ -85,10 +87,14 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   function handleUpdateAvatar(avatar) {
+    setIsLoading(true);
     api
       .editAvatar(avatar)
       .then((userAvatar) => {
@@ -97,6 +103,9 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -118,11 +127,12 @@ function App() {
   function handleCardDelete(card) {
     api
       .deleteCard(card._id)
-      .then((newCard) => {
-        const newCards = cards.filter((c) =>
-          c._id === card._id ? "" : newCard
-        );
-        setCards(newCards);
+      .then(() => {
+        setCards((state) => state.filter((item) => item._id !== card._id));
+        // const newCards = cards.filter((c) =>
+        //   c._id === card._id ? "" : newCard
+        // );
+        // setCards(newCards);
       })
       .catch((err) => {
         console.log(`Вось такая вось памылка: ${err}`);
@@ -130,6 +140,7 @@ function App() {
   }
 
   function handleAddPlaceSubmit(placeData) {
+    setIsLoading(true);
     api
       .addNewCard(placeData)
       .then((newCard) => {
@@ -138,6 +149,9 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -159,18 +173,21 @@ function App() {
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={handleUpdateAvatar}
+        isLoading={isLoading}
       />
 
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={handleUpdateUser}
+        isLoading={isLoading}
       />
 
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddPlaceSubmit}
+        isLoading={isLoading}
       />
 
       <ImagePopup

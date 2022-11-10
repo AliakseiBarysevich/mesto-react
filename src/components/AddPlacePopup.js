@@ -2,7 +2,7 @@ import PopupWithForm from "./PopupWithForm";
 import React from "react";
 import useForm from "../hooks/useForm";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const {values, handleChange, setValues} = useForm({});
 
   React.useEffect(() => {
@@ -22,7 +22,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       title="Новое место"
       isOpen={isOpen}
       onClose={onClose}
-      buttonText="Сохранить"
+      buttonText={isLoading ? 'Сохранение...' : 'Сохранить'}
       onSubmit={handleSubmit}
     >
       <div className="popup__input-container">

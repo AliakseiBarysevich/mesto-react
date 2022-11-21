@@ -1,4 +1,5 @@
 import React from "react";
+import { Route } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -8,6 +9,11 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import Register from "./Register";
+import Login from "./Login";
+// import InfoTooltip from "./InfoTooltip";
+import ProtectedRoute from "./ProtectedRoute";
+import { authorize, register, checkToken } from "./../auth";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -151,9 +157,44 @@ function App() {
       });
   }
 
+  const registerFunction = (email, password) => {
+    register(email, password)
+    .then((data) => {
+      // authorize({email: data.email, password: data.password});
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      // setIsLoading(false);
+      console.log('finally');
+    });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
+      {/* <InfoTooltip /> */}
+      {/* <Route path="/signup"> */}
+      <Register onRegister={registerFunction} />
+      {/* </Route> */}
+      {/* <Route path="/signin"> */}
+      <Login />
+      {/* </Route> */}
+
+      {/* <ProtectedRoute
+        // loggedIn={isLoggedIn}
+        component={Main}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
+        cards={cards}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
+      /> */}
+
       <Main
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
@@ -163,6 +204,7 @@ function App() {
         onCardLike={handleCardLike}
         onCardDelete={handleCardDelete}
       />
+
       <Footer />
 
       <EditAvatarPopup
@@ -191,6 +233,10 @@ function App() {
         onClose={closeAllPopups}
         isOpen={isImagePopupOpen}
       />
+      {/* 
+      <Route>
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+          </Route> */}
     </CurrentUserContext.Provider>
   );
 }

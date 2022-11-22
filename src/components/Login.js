@@ -1,12 +1,21 @@
 import React from "react";
+import useForm from "../hooks/useForm";
 
-function Login() {
+function Login({ onLogin, ...props }) {
+  const { values, handleChange, setValues } = useForm({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let { email, password } = values;
+    onLogin(email, password);
+  }
+
   return (
     <div className="register">
       <h3 className="register__heading">Вход</h3>
       <form
         className="register__form"
-        // onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       >
         <div className="register__input-container">
           <input
@@ -17,8 +26,8 @@ function Login() {
             minLength="2"
             maxLength="30"
             name="email"
-            // value={values.name || ""}
-            // onChange={handleChange}
+            value={values.email || ""}
+            onChange={handleChange}
             required
           />
           {/* <span className="popup__error place-name-input-error"></span> */}
@@ -30,8 +39,8 @@ function Login() {
             type="password"
             placeholder="Пароль"
             name="password"
-            // value={values.link || ""}
-            // onChange={handleChange}
+            value={values.password || ""}
+            onChange={handleChange}
             required
           />
           {/* <span className="popup__error place-link-input-error"></span> */}

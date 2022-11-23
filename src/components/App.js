@@ -35,6 +35,7 @@ function App() {
   const [isInfoTooltipOpen, setIsInfotooltipOpen] = React.useState(false);
   const history = useHistory();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState("");
 
   React.useEffect(() => {
     Promise.all([api.loadUserInfoFromServer(), api.getCards()])
@@ -167,6 +168,7 @@ function App() {
   }
 
   const handleRegister = (email, password) => {
+    setIsLoading(true);
     register(email, password)
       .then((data) => {
         setIsSignupSuccessful(true);
@@ -180,17 +182,18 @@ function App() {
         handleInfoTooltipOpen();
       })
       .finally(() => {
-        // setIsLoading(false);
+        setIsLoading(false);
         console.log("finally");
       });
   };
 
   const handleAuthorize = (email, password) => {
+    setIsLoading(true);
     authorize(email, password)
       .then((data) => {
         setIsLoggedIn(true);
         localStorage.setItem("jwt", data.token);
-        console.log(data);
+        console.log(data.token);
         handleCheckToken();
         history.push("/");
       })
@@ -198,17 +201,18 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        // setIsLoading(false);
+        setIsLoading(false);
         console.log("finally");
       });
   };
 
-  const handleCheckToken = () => {
+  const handleCheckToken = React.useCallback(() => {
+    setIsLoading(true);
     const token = localStorage.getItem("jwt");
     checkToken(token)
       .then((data) => {
-        // setAutorizationUserEmail(data.data.email);
         console.log(data);
+        setUserEmail(data.data.email);
         setIsLoggedIn(true);
         history.push("/");
       })
@@ -216,14 +220,32 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        // setIsLoading(false);
+        setIsLoading(false);
         console.log("finally");
       });
+  }, [history]);
+
+  React.useEffect(() => {
+    handleCheckToken();
+  }, [handleCheckToken]);
+
+  const signOut = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("jwt");
+    history.push("/sign-in");
   };
+
+  if (isLoading) {
+    return <div class="spinner"></div>;
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header
+        isLoggedIn={isLoggedIn}
+        userEmail={userEmail}
+        onSignOut={signOut}
+      />
 
       <Switch>
         <Route path="/sign-up">
@@ -247,15 +269,6 @@ function App() {
           onCardDelete={handleCardDelete}
         />
       </Switch>
-      {/* <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-      /> */}
 
       <Footer />
 

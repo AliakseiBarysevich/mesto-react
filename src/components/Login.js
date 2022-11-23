@@ -2,21 +2,18 @@ import React from "react";
 import useForm from "../hooks/useForm";
 
 function Login({ onLogin, ...props }) {
-  const { values, handleChange, setValues } = useForm({});
+  const { values, handleChange } = useForm({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let { email, password } = values;
     onLogin(email, password);
-  }
+  };
 
   return (
     <div className="register">
       <h3 className="register__heading">Вход</h3>
-      <form
-        className="register__form"
-        onSubmit={handleSubmit}
-      >
+      <form className="register__form" onSubmit={handleSubmit}>
         <div className="register__input-container">
           <input
             className="register__input"
@@ -30,7 +27,6 @@ function Login({ onLogin, ...props }) {
             onChange={handleChange}
             required
           />
-          {/* <span className="popup__error place-name-input-error"></span> */}
         </div>
         <div className="register__input-container">
           <input
@@ -43,7 +39,6 @@ function Login({ onLogin, ...props }) {
             onChange={handleChange}
             required
           />
-          {/* <span className="popup__error place-link-input-error"></span> */}
         </div>
         <button className="register__submit-button">Войти</button>
       </form>
